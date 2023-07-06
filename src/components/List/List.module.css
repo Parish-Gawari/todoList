@@ -5,3 +5,11 @@
 .list {
     display: inline-block;
 }
+
+.listItem {
+    margin: 5px;
+}
+
+.itemDoneStyle {
+    background-color: lightgreen;
+}
