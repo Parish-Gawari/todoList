@@ -3,11 +3,60 @@
 import React from "react";
 import styles from "./List.module.css";
 import Button from "../Button/Button";
+import Input from "../Input/Input";
 
-const List = ({ tasks, swapListItemHandler, isDoneHandler, deleteHandler }) => {
+const List = ({
+  tasks,
+  swapListItemHandler,
+  isDoneHandler,
+  deleteHandler,
+  isEditingHandler,
+  cancelHandler,
+  itemListChangeHandler,
+  itemSaveHandler,
+}) => {
   const list = tasks.map((value, index) => (
     <li key={index} className={value.isDone ? styles.itemDoneStyle : ""}>
-      {value.item}
+      {!value.isEditing && (
+        <>
+          {value.item}
+          <Button
+            btnLable="EDIT"
+            className={styles.listItem}
+            btnClick={() => {
+              isEditingHandler(index);
+            }}
+            btnDisabled={value.isDone}
+          />
+        </>
+      )}
+
+      {value.isEditing && (
+        <>
+          <Input
+            inputValue={value.editingItem}
+            input={(val) => {
+              itemListChangeHandler(index, val);
+            }}
+          />
+          <Button
+            btnLable="SAVE"
+            className={styles.listItem}
+            btnClick={() => {
+              itemSaveHandler(index);
+            }}
+            btnDisabled={value.editingItem.trim().length === 0}
+          />
+          <Button
+            btnLable="CANCEL"
+            className={styles.listItem}
+            btnClick={() => {
+              cancelHandler(index);
+            }}
+            btnDisabled={value.isDone}
+          />
+        </>
+      )}
       <Button
         btnLable="UP"
         className={styles.listItem}

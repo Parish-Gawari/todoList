@@ -28,7 +28,9 @@ const TodoList = () => {
         ...list,
         {
           item: trimText,
+          editingItem: trimText,
           isDone: false,
+          isEditing: false,
         },
       ]);
       setText("");
@@ -58,6 +60,39 @@ const TodoList = () => {
     items.splice(index, 1);
     setList(items);
   };
+
+  const clearAllHandler = () => {
+    setList([]);
+  };
+  const isEditingHandler = (index) => {
+    const items = [...list];
+    items[index].isEditing = true;
+    setList(items);
+  };
+
+  const cancelHandler = (index) => {
+    const items = [...list];
+    items[index].isEditing = false;
+    items[index].editingItem = items[index].item;
+    setList(items);
+  };
+
+  const itemListChangeHandler = (index, value) => {
+    const items = [...list];
+    items[index].editingItem = value;
+    setList(items);
+  };
+  const itemSaveHandler = (index) => {
+    const items = [...list];
+    items[index].isEditing = false;
+    const item = items[index].editingItem.trim();
+    if (item) {
+      items[index].item = item;
+      items[index].editingItem = item;
+    }
+    items[index].item = items[index].editingItem;
+    setList(items);
+  };
   return (
     <div className={styles.todoContainer}>
       <Input
@@ -70,11 +105,20 @@ const TodoList = () => {
         btnLable="Add to List"
         btnDisabled={text.trim().length === 0}
       />
+      <Button
+        btnClick={clearAllHandler}
+        btnLable="Clear All"
+        btnDisabled={list.length === 0}
+      />
       <List
         tasks={list}
         swapListItemHandler={swapListItemHandler}
         isDoneHandler={isDoneHandler}
         deleteHandler={deleteHandler}
+        isEditingHandler={isEditingHandler}
+        cancelHandler={cancelHandler}
+        itemListChangeHandler={itemListChangeHandler}
+        itemSaveHandler={itemSaveHandler}
       />
     </div>
   );
