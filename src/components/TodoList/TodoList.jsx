@@ -98,9 +98,9 @@ const TodoList = () => {
     setList(items);
   };
 
-  const items = [...list];
-  const doneItems = items.filter((element) => element.isDone === false);
-  const clearDoneHandler = (index) => {
+  const clearDoneHandler = () => {
+    const items = [...list];
+    const doneItems = items.filter((element) => element.isDone === false);
     if (doneItems.length === items.length) {
       alert("There are no done marked todo's");
     } else {
@@ -116,8 +116,18 @@ const TodoList = () => {
     setListcopy([...list]);
     const items = [...list];
     const sItem = items.filter((ele) => ele.item.startsWith(svalue));
-    setList(sItem);
-    setIssearch(true);
+    if (sItem.length === 0) {
+      alert("No Such Item");
+    } else {
+      setList(sItem);
+      setIssearch(true);
+    }
+  };
+
+  const SearchkeyHandler = (e) => {
+    if (e.key == "Enter") {
+      onSearchBtnClick();
+    }
   };
 
   const goBackhandler = () => {
@@ -144,11 +154,7 @@ const TodoList = () => {
         btnLable="Clear All"
         btnDisabled={list.length === 0}
       />
-      <Button
-        btnLable="Clear Done"
-        btnClick={clearDoneHandler}
-        btnDisabled={doneItems.length === 0}
-      />
+      <Button btnLable="Clear Done" btnClick={clearDoneHandler} />
 
       <br />
 
@@ -169,6 +175,7 @@ const TodoList = () => {
             className={styles.searchInput}
             onSearchChange={onSearchChange}
             btnLable="Search"
+            keyHandler={SearchkeyHandler}
             btnClick={onSearchBtnClick}
             btnDisabled={svalue.trim().length === 0}
           />

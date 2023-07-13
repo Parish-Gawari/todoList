@@ -10,6 +10,7 @@ const SearchBar = ({
   btnLable,
   btnClick,
   btnDisabled,
+  keyHandler,
 }) => {
   const onChangehandler = (e) => {
     onSearchChange(e.target.value);
@@ -20,6 +21,7 @@ const SearchBar = ({
         className={className}
         placeholder={inputLabel}
         onChange={onChangehandler}
+        onKeyUp={keyHandler}
       />
       <Button
         btnLable={btnLable}
