@@ -4,12 +4,16 @@ import Input from "../Input/Input";
 import Button from "../Button/Button";
 import List from "../List/List";
 import styles from "./TodoList.module.css";
+import SearchBar from "../SearchBar/SearchBar";
 
 const LS_TODO_LIST = "TodoList";
 
 const TodoList = () => {
   const [list, setList] = useState([]);
   const [text, setText] = useState("");
+  const [svalue, setSvalue] = useState("");
+  const [issearch, setIssearch] = useState(false);
+  const [listcopy, setListcopy] = useState([]);
 
   useEffect(() => {
     const listItems = JSON.parse(localStorage.getItem(LS_TODO_LIST)) || [];
@@ -93,12 +97,42 @@ const TodoList = () => {
     items[index].item = items[index].editingItem;
     setList(items);
   };
+
+  const items = [...list];
+  const doneItems = items.filter((element) => element.isDone === false);
+  const clearDoneHandler = (index) => {
+    if (doneItems.length === items.length) {
+      alert("There are no done marked todo's");
+    } else {
+      setList(doneItems);
+    }
+  };
+
+  const onSearchChange = (e) => {
+    setSvalue(e);
+  };
+
+  const onSearchBtnClick = () => {
+    setListcopy([...list]);
+    const items = [...list];
+    const sItem = items.filter((ele) => ele.item.startsWith(svalue));
+    setList(sItem);
+    setIssearch(true);
+  };
+
+  const goBackhandler = () => {
+    setList([...listcopy]);
+    setIssearch(false);
+    setSvalue("");
+  };
+
   return (
     <div className={styles.todoContainer}>
       <Input
         input={inputChangeHandler}
         inputValue={text}
         keyhandler={keyHandler}
+        inputLabel="Enter Task here"
       />
       <Button
         btnClick={btnClickHandler}
@@ -110,6 +144,36 @@ const TodoList = () => {
         btnLable="Clear All"
         btnDisabled={list.length === 0}
       />
+      <Button
+        btnLable="Clear Done"
+        btnClick={clearDoneHandler}
+        btnDisabled={doneItems.length === 0}
+      />
+
+      <br />
+
+      {issearch && (
+        <>
+          <SearchBar
+            className={styles.searchInput}
+            btnLable="Cancel Search"
+            btnClick={goBackhandler}
+          />
+        </>
+      )}
+
+      {!issearch && (
+        <>
+          <SearchBar
+            inputLabel="Search Here"
+            className={styles.searchInput}
+            onSearchChange={onSearchChange}
+            btnLable="Search"
+            btnClick={onSearchBtnClick}
+            btnDisabled={svalue.trim().length === 0}
+          />
+        </>
+      )}
       <List
         tasks={list}
         swapListItemHandler={swapListItemHandler}

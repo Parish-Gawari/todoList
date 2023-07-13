@@ -79,7 +79,7 @@ const List = ({
           btnLable="DELETE"
           className={styles.listItem}
           btnClick={() => {
-            deleteHandler(index);
+            deleteHandler();
           }}
         />
       )}
