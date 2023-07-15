@@ -5,6 +5,7 @@ import Button from "../Button/Button";
 import List from "../List/List";
 import styles from "./TodoList.module.css";
 import SearchBar from "../SearchBar/SearchBar";
+import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
 
 const LS_TODO_LIST = "TodoList";
 
@@ -14,6 +15,7 @@ const TodoList = () => {
   const [svalue, setSvalue] = useState("");
   const [issearch, setIssearch] = useState(false);
   const [listcopy, setListcopy] = useState([]);
+  const [confirm, setConfrim] = useState(false);
 
   useEffect(() => {
     const listItems = JSON.parse(localStorage.getItem(LS_TODO_LIST)) || [];
@@ -59,10 +61,8 @@ const TodoList = () => {
     setList(items);
   };
 
-  const deleteHandler = (index) => {
-    const items = [...list];
-    items.splice(index, 1);
-    setList(items);
+  const deleteHandler = () => {
+    setConfrim(true);
   };
 
   const clearAllHandler = () => {
@@ -136,6 +136,17 @@ const TodoList = () => {
     setSvalue("");
   };
 
+  const deleteYesHandler = (index) => {
+    const items = [...list];
+    items.splice(index, 1);
+    setList(items);
+    setConfrim(false);
+  };
+
+  const deleteNoHandler = () => {
+    setConfrim(false);
+  };
+
   return (
     <div className={styles.todoContainer}>
       <Input
@@ -181,16 +192,26 @@ const TodoList = () => {
           />
         </>
       )}
-      <List
-        tasks={list}
-        swapListItemHandler={swapListItemHandler}
-        isDoneHandler={isDoneHandler}
-        deleteHandler={deleteHandler}
-        isEditingHandler={isEditingHandler}
-        cancelHandler={cancelHandler}
-        itemListChangeHandler={itemListChangeHandler}
-        itemSaveHandler={itemSaveHandler}
-      />
+      {!confirm && (
+        <>
+          <List
+            tasks={list}
+            swapListItemHandler={swapListItemHandler}
+            isDoneHandler={isDoneHandler}
+            deleteHandler={deleteHandler}
+            isEditingHandler={isEditingHandler}
+            cancelHandler={cancelHandler}
+            itemListChangeHandler={itemListChangeHandler}
+            itemSaveHandler={itemSaveHandler}
+          />
+        </>
+      )}
+      {confirm && (
+        <ConfirmDialog
+          deleteYesHandler={deleteYesHandler}
+          deleteNoHandler={deleteNoHandler}
+        />
+      )}
     </div>
   );
 };
