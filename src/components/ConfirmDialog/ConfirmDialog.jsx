@@ -1,40 +1,35 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-const ConfirmDialog = ({ deleteYesHandler, deleteNoHandler }) => {
-  const onYesClick = () => {
-    deleteYesHandler();
-  };
-  const onNoClick = () => {
-    deleteNoHandler();
-  };
+const ConfirmDialog = ({
+  onYesClickHandler,
+  onCancelClickHandler,
+  confirmShow,
+  Message,
+  Title,
+}) => {
+  const handleClose = () => onCancelClickHandler();
+  const yesClickHandler = () => onYesClickHandler();
+
   return (
-    <div
-      className="modal show"
-      style={{ display: "block", position: "initial" }}
-    >
-      <Modal.Dialog>
-        <Modal.Header>
-          <Modal.Title>Deletion Confrimation</Modal.Title>
+    <>
+      <Modal show={confirmShow} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>{Title}</Modal.Title>
         </Modal.Header>
-
-        <Modal.Body>
-          <p>Do you really want to delete this ?</p>
-        </Modal.Body>
-
+        <Modal.Body style={{ color: "red" }}>{Message}</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={onNoClick}>
-            No
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
           </Button>
-          <Button variant="primary" onClick={onYesClick}>
+          <Button variant="primary" onClick={yesClickHandler}>
             Yes
           </Button>
         </Modal.Footer>
-      </Modal.Dialog>
-    </div>
+      </Modal>
+    </>
   );
 };
 

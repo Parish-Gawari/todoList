@@ -1,12 +1,20 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
-import React from "react";
-
-const Button = ({ btnClick, btnLable, btnDisabled, className }) => {
-  const onClick = () => btnClick();
+const Button = ({
+  btnClickHandler,
+  btnLabel,
+  isDisabled,
+  style,
+  className,
+}) => {
+  // console.log('Button');
   return (
-    <button onClick={onClick} disabled={btnDisabled} className={className}>
-      {btnLable}
+    <button
+      onClick={btnClickHandler}
+      disabled={isDisabled}
+      style={style}
+      className={className}
+    >
+      {btnLabel}
     </button>
   );
 };

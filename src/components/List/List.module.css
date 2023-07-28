@@ -1,15 +1,15 @@
-.listContainer {
-    margin-top: 20px;
-}
-
 .list {
-    display: inline-block;
+  display: inline-block;
 }
 
-.listItem {
-    margin: 5px;
+.itemBtn {
+  margin: 5px 5px;
+}
+
+.listContainer {
+  margin-top: 20px;
 }
 
 .itemDoneStyle {
-    background-color: lightgreen;
+  background-color: rgb(88, 234, 88);
 }

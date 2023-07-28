@@ -1,23 +1,25 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
-import Input from "../Input/Input";
+import { useEffect, useState } from "react";
 import Button from "../Button/Button";
+import Input from "../Input/Input";
 import List from "../List/List";
 import styles from "./TodoList.module.css";
-import SearchBar from "../SearchBar/SearchBar";
 import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
+import Searchbar from "../SearchBar/SearchBar";
 
-const LS_TODO_LIST = "TodoList";
+const LS_TODO_LIST = "todoList";
 
 const TodoList = () => {
   const [list, setList] = useState([]);
   const [text, setText] = useState("");
-  const [svalue, setSvalue] = useState("");
-  const [issearch, setIssearch] = useState(false);
-  const [listcopy, setListcopy] = useState([]);
-  const [confirm, setConfrim] = useState(false);
+  const [delConfirm, setDelConfirm] = useState(false);
+  const [clearDoneConfirm, setclearDoneConfrim] = useState(false);
+  const [clearAllConfirmation, setClearAllConfirmation] = useState(false);
+  const [todoIndex, setTodoIndex] = useState(0);
+  const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
+    // read the local storage
     const listItems = JSON.parse(localStorage.getItem(LS_TODO_LIST)) || [];
     setList(listItems);
   }, []);
@@ -27,6 +29,7 @@ const TodoList = () => {
   }, [list]);
 
   const inputChangeHandler = (str) => setText(str);
+
   const btnClickHandler = () => {
     const trimText = text.trim();
     if (trimText) {
@@ -37,21 +40,24 @@ const TodoList = () => {
           editingItem: trimText,
           isDone: false,
           isEditing: false,
+          isSearch: true,
         },
       ]);
       setText("");
     }
   };
 
-  const keyHandler = (e) => {
-    if (e.key == "Enter") {
+  const inputKeydownHandler = (e) => {
+    if (e.key === "Enter") {
       btnClickHandler();
     }
   };
 
-  const swapListItemHandler = (initIndex, finIndex) => {
+  const swapListItemHandler = (initIndex, finalIndex) => {
     const items = [...list];
-    [items[initIndex], items[finIndex]] = [items[finIndex], items[initIndex]];
+    let temp = items[initIndex];
+    items[initIndex] = items[finalIndex];
+    items[finalIndex] = temp;
     setList(items);
   };
 
@@ -61,13 +67,15 @@ const TodoList = () => {
     setList(items);
   };
 
-  const deleteHandler = () => {
-    setConfrim(true);
+  const deleteHandler = (index) => {
+    setDelConfirm(true);
+    setTodoIndex(index);
   };
 
-  const clearAllHandler = () => {
-    setList([]);
+  const deleteAllHandler = () => {
+    setClearAllConfirmation(true);
   };
+
   const isEditingHandler = (index) => {
     const items = [...list];
     items[index].isEditing = true;
@@ -86,6 +94,7 @@ const TodoList = () => {
     items[index].editingItem = value;
     setList(items);
   };
+
   const itemSaveHandler = (index) => {
     const items = [...list];
     items[index].isEditing = false;
@@ -94,106 +103,77 @@ const TodoList = () => {
       items[index].item = item;
       items[index].editingItem = item;
     }
-    items[index].item = items[index].editingItem;
     setList(items);
   };
 
-  const clearDoneHandler = () => {
+  const clearAllDoneHandler = () => {
+    setclearDoneConfrim(true);
+  };
+
+  const onYesClickHandler = () => {
     const items = [...list];
-    const doneItems = items.filter((element) => element.isDone === false);
-    if (doneItems.length === items.length) {
-      alert("There are no done marked todo's");
-    } else {
-      setList(doneItems);
-    }
+    const unDone = items.filter((ele) => ele.isDone === false);
+    setList(unDone);
+    setclearDoneConfrim(false);
+  };
+
+  const onCancelClickHandler = () => {
+    setclearDoneConfrim(false);
   };
 
   const onSearchChange = (e) => {
-    setSvalue(e);
-  };
-
-  const onSearchBtnClick = () => {
-    setListcopy([...list]);
     const items = [...list];
-    const sItem = items.filter((ele) => ele.item.startsWith(svalue));
-    if (sItem.length === 0) {
-      alert("No Such Item");
-    } else {
-      setList(sItem);
-      setIssearch(true);
+    const prevItems = [...list];
+    if (e.trim().length !== 0) {
+      for (let key of items) {
+        if (!key.item.includes(e)) {
+          key.isSearch = false;
+        }
+      }
+      setList(items);
+      console.log(items);
+    } else if (e.trim().length === 0) {
+      for (let key of prevItems) {
+        key.isSearch = true;
+      }
+      setList(prevItems);
+      console.log(items);
     }
-  };
-
-  const SearchkeyHandler = (e) => {
-    if (e.key == "Enter") {
-      onSearchBtnClick();
-    }
-  };
-
-  const goBackhandler = () => {
-    setList([...listcopy]);
-    setIssearch(false);
-    setSvalue("");
-  };
-
-  const deleteYesHandler = (index) => {
-    const items = [...list];
-    items.splice(index, 1);
-    setList(items);
-    setConfrim(false);
-  };
-
-  const deleteNoHandler = () => {
-    setConfrim(false);
   };
 
   return (
     <div className={styles.todoContainer}>
       <Input
-        input={inputChangeHandler}
+        inputChangeHandler={inputChangeHandler}
         inputValue={text}
-        keyhandler={keyHandler}
-        inputLabel="Enter Task here"
+        keyHandler={inputKeydownHandler}
       />
       <Button
-        btnClick={btnClickHandler}
-        btnLable="Add to List"
-        btnDisabled={text.trim().length === 0}
+        btnClickHandler={btnClickHandler}
+        btnLabel="Add to List"
+        isDisabled={text.trim().length === 0}
       />
       <Button
-        btnClick={clearAllHandler}
-        btnLable="Clear All"
-        btnDisabled={list.length === 0}
+        btnClickHandler={deleteAllHandler}
+        btnLabel="Clear All"
+        isDisabled={list.length === 0}
       />
-      <Button btnLable="Clear Done" btnClick={clearDoneHandler} />
+      <Button
+        btnClickHandler={clearAllDoneHandler}
+        btnLabel="Clear Done"
+        isDisabled={
+          !(list.length && list.reduce((acc, el) => acc || el.isDone, false))
+        }
+      />
 
-      <br />
-
-      {issearch && (
+      {!isSearching && (
         <>
-          <SearchBar
-            className={styles.searchInput}
-            btnLable="Cancel Search"
-            btnClick={goBackhandler}
-          />
-        </>
-      )}
-
-      {!issearch && (
-        <>
-          <SearchBar
-            inputLabel="Search Here"
-            className={styles.searchInput}
-            onSearchChange={onSearchChange}
-            btnLable="Search"
-            keyHandler={SearchkeyHandler}
-            btnClick={onSearchBtnClick}
-            btnDisabled={svalue.trim().length === 0}
-          />
-        </>
-      )}
-      {!confirm && (
-        <>
+          <div style={{ marginTop: "10px" }}>
+            <Searchbar
+              placeHolder="Search Here"
+              onSearchChange={onSearchChange}
+            />
+          </div>
           <List
             tasks={list}
             swapListItemHandler={swapListItemHandler}
@@ -206,10 +186,66 @@ const TodoList = () => {
           />
         </>
       )}
-      {confirm && (
+      {isSearching && (
+        <>
+          <div style={{ marginTop: "10px" }}>
+            <Searchbar
+              placeHolder="Search Here"
+              onSearchChange={onSearchChange}
+            />
+          </div>
+          <List
+            tasks={list}
+            swapListItemHandler={swapListItemHandler}
+            isDoneHandler={isDoneHandler}
+            deleteHandler={deleteHandler}
+            isEditingHandler={isEditingHandler}
+            cancelHandler={cancelHandler}
+            itemListChangeHandler={itemListChangeHandler}
+            itemSaveHandler={itemSaveHandler}
+          />
+        </>
+      )}
+
+      {clearDoneConfirm && (
         <ConfirmDialog
-          deleteYesHandler={deleteYesHandler}
-          deleteNoHandler={deleteNoHandler}
+          confirmShow={clearDoneConfirm}
+          Message="Do You Really Want To Clear All Done Todo's ?"
+          Title="Clear Confirmation"
+          onYesClickHandler={onYesClickHandler}
+          onCancelClickHandler={onCancelClickHandler}
+        />
+      )}
+
+      {clearAllConfirmation && (
+        <ConfirmDialog
+          confirmShow={clearAllConfirmation}
+          Message="Do You Really Want To Clear All Todo's ?"
+          Title="Clear All Confirmation"
+          onYesClickHandler={() => {
+            setList([]);
+            setClearAllConfirmation(false);
+          }}
+          onCancelClickHandler={() => {
+            setClearAllConfirmation(false);
+          }}
+        />
+      )}
+
+      {delConfirm && (
+        <ConfirmDialog
+          confirmShow={delConfirm}
+          Message="Do You Really Want To Delete This Todo's ?"
+          Title="Delete Confirmation"
+          onYesClickHandler={(index = todoIndex) => {
+            const items = [...list];
+            items.splice(index, 1);
+            setList(items);
+            setDelConfirm(false);
+          }}
+          onCancelClickHandler={() => {
+            setDelConfirm(false);
+          }}
         />
       )}
     </div>

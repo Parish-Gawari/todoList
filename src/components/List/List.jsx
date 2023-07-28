@@ -1,10 +1,9 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
-import React from "react";
-import styles from "./List.module.css";
 import Button from "../Button/Button";
 import Input from "../Input/Input";
+import styles from "./List.module.css";
 
+// eslint-disable-next-line react/prop-types
 const List = ({
   tasks,
   swapListItemHandler,
@@ -15,88 +14,81 @@ const List = ({
   itemListChangeHandler,
   itemSaveHandler,
 }) => {
-  const list = tasks.map((value, index) => (
-    <li key={index} className={value.isDone ? styles.itemDoneStyle : ""}>
-      {!value.isEditing && (
+  // eslint-disable-next-line react/prop-types
+
+  const listItems = tasks.map((task, index) => (
+    <li
+      key={index}
+      className={task.isDone ? styles.itemDoneStyle : ""}
+      style={task.isSearch ? { display: "block" } : { display: "none" }}
+    >
+      {!task.isEditing && (
         <>
-          {value.item}
+          {task.item}
+
           <Button
-            btnLable="EDIT"
-            className={styles.listItem}
-            btnClick={() => {
-              isEditingHandler(index);
-            }}
-            btnDisabled={value.isDone}
+            btnLabel="Edit"
+            className={styles.itemBtn}
+            btnClickHandler={() => isEditingHandler(index)}
+            isDisabled={task.isDone}
           />
         </>
       )}
-
-      {value.isEditing && (
+      {task.isEditing && (
         <>
           <Input
-            inputValue={value.editingItem}
-            input={(val) => {
-              itemListChangeHandler(index, val);
-            }}
+            inputValue={task.editingItem}
+            inputChangeHandler={(value) => itemListChangeHandler(index, value)}
           />
           <Button
-            btnLable="SAVE"
-            className={styles.listItem}
-            btnClick={() => {
-              itemSaveHandler(index);
-            }}
-            btnDisabled={value.editingItem.trim().length === 0}
+            btnLabel="Save"
+            className={styles.itemBtn}
+            btnClickHandler={() => itemSaveHandler(index)}
+            isDisabled={task.editingItem.trim().length === 0}
           />
           <Button
-            btnLable="CANCEL"
-            className={styles.listItem}
-            btnClick={() => {
-              cancelHandler(index);
-            }}
-            btnDisabled={value.isDone}
+            btnLabel="Cancel"
+            className={styles.itemBtn}
+            btnClickHandler={() => cancelHandler(index)}
           />
         </>
       )}
+
       <Button
-        btnLable="UP"
-        className={styles.listItem}
-        btnClick={() => {
-          swapListItemHandler(index, index - 1);
-        }}
-        btnDisabled={index === 0}
+        btnLabel="UP"
+        className={styles.itemBtn}
+        btnClickHandler={() => swapListItemHandler(index, index - 1)}
+        isDisabled={index === 0}
       />
       <Button
-        btnLable="DOWN"
-        className={styles.listItem}
-        btnClick={() => {
-          swapListItemHandler(index, index + 1);
-        }}
-        btnDisabled={index === tasks.length - 1}
+        btnLabel="DOWN"
+        className={styles.itemBtn}
+        btnClickHandler={() => swapListItemHandler(index, index + 1)}
+        isDisabled={index === tasks.length - 1}
       />
 
-      {value.isDone && (
+      {task.isDone && (
         <Button
-          btnLable="DELETE"
-          className={styles.listItem}
-          btnClick={() => {
-            deleteHandler();
-          }}
+          btnLabel="Delete"
+          className={styles.itemBtn}
+          btnClickHandler={() => deleteHandler(index)}
         />
       )}
-      {!value.isDone && (
+
+      {!task.isDone && (
         <Button
-          btnLable="DONE"
-          className={styles.listItem}
-          btnClick={() => {
-            isDoneHandler(index);
-          }}
+          btnLabel="Done"
+          className={styles.itemBtn}
+          btnClickHandler={() => isDoneHandler(index)}
+          isDisabled={task.isEditing}
         />
       )}
     </li>
   ));
+
   return (
     <div className={styles.listContainer}>
-      <ul className={styles.list}>{list}</ul>
+      <ul className={styles.list}>{listItems}</ul>
     </div>
   );
 };

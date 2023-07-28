@@ -1,10 +1,8 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
-import React from "react";
-
-const Input = ({ input, inputValue, keyhandler, inputLabel, className }) => {
+// eslint-disable-next-line react/prop-types
+const Input = ({ inputChangeHandler, inputValue, keyHandler }) => {
+  // console.log('Input');
   const changeHandler = (e) => {
-    input(e.target.value);
+    inputChangeHandler(e.target.value);
   };
 
   return (
@@ -12,9 +10,7 @@ const Input = ({ input, inputValue, keyhandler, inputLabel, className }) => {
       type="text"
       onChange={changeHandler}
       value={inputValue}
-      onKeyUp={keyhandler}
-      placeholder={inputLabel}
-      className={className}
+      onKeyUp={keyHandler}
     />
   );
 };

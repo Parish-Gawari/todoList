@@ -1,19 +1,15 @@
-/* eslint-disable no-unused-vars */
-import React from "react";
-import { Navbar, Container, Nav } from "react-bootstrap";
+import { Container, Navbar } from 'react-bootstrap';
 
 const AppHeader = () => {
+  // console.log('AppHeader');
   return (
-    <>
-      <header>
-        <Navbar bg="primary" data-bs-theme="dark">
-          <Container>
-            <Navbar.Brand href="#home">Todo List</Navbar.Brand>
-            <Nav className="me-auto"></Nav>
-          </Container>
-        </Navbar>
-      </header>
-    </>
+    <header style={{ marginBottom: '20px' }}>
+      <Navbar bg="primary" data-bs-theme="dark">
+        <Container>
+          <Navbar.Brand href="#">Todo App</Navbar.Brand>
+        </Container>
+      </Navbar>
+    </header>
   );
 };
 

@@ -3,30 +3,16 @@
 import React from "react";
 import Button from "../Button/Button";
 
-const SearchBar = ({
-  inputLabel,
-  className,
-  onSearchChange,
-  btnLable,
-  btnClick,
-  btnDisabled,
-  keyHandler,
-}) => {
+const SearchBar = ({ placeHolder, onSearchChange, value }) => {
   const onChangehandler = (e) => {
     onSearchChange(e.target.value);
   };
   return (
     <>
       <input
-        className={className}
-        placeholder={inputLabel}
+        placeholder={placeHolder}
         onChange={onChangehandler}
-        onKeyUp={keyHandler}
-      />
-      <Button
-        btnLable={btnLable}
-        btnClick={btnClick}
-        btnDisabled={btnDisabled}
+        value={value}
       />
     </>
   );

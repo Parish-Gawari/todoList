@@ -1,11 +1,11 @@
 .footer {
-    display: flex;
-    height: 60px;
-    color: blue;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: rgb(210, 228, 228);
+  background: #0b6efd;
+  color: white;
+  height: 50px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
