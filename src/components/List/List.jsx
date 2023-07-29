@@ -13,6 +13,7 @@ const List = ({
   cancelHandler,
   itemListChangeHandler,
   itemSaveHandler,
+  isSearching,
 }) => {
   // eslint-disable-next-line react/prop-types
 
@@ -58,13 +59,13 @@ const List = ({
         btnLabel="UP"
         className={styles.itemBtn}
         btnClickHandler={() => swapListItemHandler(index, index - 1)}
-        isDisabled={index === 0}
+        isDisabled={index === 0 || isSearching}
       />
       <Button
         btnLabel="DOWN"
         className={styles.itemBtn}
         btnClickHandler={() => swapListItemHandler(index, index + 1)}
-        isDisabled={index === tasks.length - 1}
+        isDisabled={index === tasks.length - 1 || isSearching}
       />
 
       {task.isDone && (

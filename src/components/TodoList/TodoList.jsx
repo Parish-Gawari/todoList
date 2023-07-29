@@ -130,14 +130,14 @@ const TodoList = () => {
           key.isSearch = false;
         }
       }
+      setIsSearching(true);
       setList(items);
-      console.log(items);
     } else if (e.trim().length === 0) {
-      for (let key of prevItems) {
+      for (let key of items) {
         key.isSearch = true;
       }
-      setList(prevItems);
-      console.log(items);
+      setIsSearching(false);
+      setList(items);
     }
   };
 
@@ -166,46 +166,20 @@ const TodoList = () => {
         }
       />
 
-      {!isSearching && (
-        <>
-          <div style={{ marginTop: "10px" }}>
-            <Searchbar
-              placeHolder="Search Here"
-              onSearchChange={onSearchChange}
-            />
-          </div>
-          <List
-            tasks={list}
-            swapListItemHandler={swapListItemHandler}
-            isDoneHandler={isDoneHandler}
-            deleteHandler={deleteHandler}
-            isEditingHandler={isEditingHandler}
-            cancelHandler={cancelHandler}
-            itemListChangeHandler={itemListChangeHandler}
-            itemSaveHandler={itemSaveHandler}
-          />
-        </>
-      )}
-      {isSearching && (
-        <>
-          <div style={{ marginTop: "10px" }}>
-            <Searchbar
-              placeHolder="Search Here"
-              onSearchChange={onSearchChange}
-            />
-          </div>
-          <List
-            tasks={list}
-            swapListItemHandler={swapListItemHandler}
-            isDoneHandler={isDoneHandler}
-            deleteHandler={deleteHandler}
-            isEditingHandler={isEditingHandler}
-            cancelHandler={cancelHandler}
-            itemListChangeHandler={itemListChangeHandler}
-            itemSaveHandler={itemSaveHandler}
-          />
-        </>
-      )}
+      <div style={{ marginTop: "10px" }}>
+        <Searchbar placeHolder="Search Here" onSearchChange={onSearchChange} />
+      </div>
+      <List
+        tasks={list}
+        swapListItemHandler={swapListItemHandler}
+        isDoneHandler={isDoneHandler}
+        deleteHandler={deleteHandler}
+        isEditingHandler={isEditingHandler}
+        cancelHandler={cancelHandler}
+        itemListChangeHandler={itemListChangeHandler}
+        itemSaveHandler={itemSaveHandler}
+        isSearching={isSearching}
+      />
 
       {clearDoneConfirm && (
         <ConfirmDialog
