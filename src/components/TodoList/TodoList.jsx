@@ -123,7 +123,6 @@ const TodoList = () => {
 
   const onSearchChange = (e) => {
     const items = [...list];
-    const prevItems = [...list];
     if (e.trim().length !== 0) {
       for (let key of items) {
         if (!key.item.includes(e)) {
