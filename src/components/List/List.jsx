@@ -39,7 +39,7 @@ const List = ({
 
           <Button
             btnLabel={<MdEditSquare />}
-            className={styles.itemBtn}
+            className={task.isDone ? styles.itemBtnDone : styles.itemBtn}
             btnClickHandler={() => isEditingHandler(index)}
             isDisabled={task.isDone}
           />
@@ -48,18 +48,18 @@ const List = ({
       {task.isEditing && (
         <>
           <Input
-            inputValue={task.editingItem}
+            inputValue={task.isDone ? styles.itemBtnDone : styles.itemBtn}
             inputChangeHandler={(value) => itemListChangeHandler(index, value)}
           />
           <Button
             btnLabel={<MdSaveAs />}
-            className={styles.itemBtn}
+            className={task.isDone ? styles.itemBtnDone : styles.itemBtn}
             btnClickHandler={() => itemSaveHandler(index)}
             isDisabled={task.editingItem.trim().length === 0}
           />
           <Button
             btnLabel={<GiCancel />}
-            className={styles.itemBtn}
+            className={task.isDone ? styles.itemBtnDone : styles.itemBtn}
             btnClickHandler={() => cancelHandler(index)}
           />
         </>
@@ -67,13 +67,13 @@ const List = ({
 
       <Button
         btnLabel={<MdArrowCircleUp />}
-        className={styles.itemBtn}
+        className={task.isDone ? styles.itemBtnDone : styles.itemBtn}
         btnClickHandler={() => swapListItemHandler(index, index - 1)}
         isDisabled={index === 0 || isSearching}
       />
       <Button
         btnLabel={<MdArrowCircleDown />}
-        className={styles.itemBtn}
+        className={task.isDone ? styles.itemBtnDone : styles.itemBtn}
         btnClickHandler={() => swapListItemHandler(index, index + 1)}
         isDisabled={index === tasks.length - 1 || isSearching}
       />
@@ -81,7 +81,7 @@ const List = ({
       {task.isDone && (
         <Button
           btnLabel={<MdDeleteForever />}
-          className={styles.itemBtn}
+          className={task.isDone ? styles.itemBtnDone : styles.itemBtn}
           btnClickHandler={() => deleteHandler(index)}
         />
       )}
@@ -89,7 +89,7 @@ const List = ({
       {!task.isDone && (
         <Button
           btnLabel={<MdDoneAll />}
-          className={styles.itemBtn}
+          className={task.isDone ? styles.itemBtnDone : styles.itemBtn}
           btnClickHandler={() => isDoneHandler(index)}
           isDisabled={task.isEditing}
         />
