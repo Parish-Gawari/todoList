@@ -2,6 +2,16 @@
 import Button from "../Button/Button";
 import Input from "../Input/Input";
 import styles from "./List.module.css";
+import {
+  MdDeleteForever,
+  MdArrowCircleDown,
+  MdArrowCircleUp,
+  MdEditSquare,
+  MdDoneAll,
+  MdSaveAs,
+} from "react-icons/md";
+
+import { GiCancel } from "react-icons/gi";
 
 // eslint-disable-next-line react/prop-types
 const List = ({
@@ -20,15 +30,15 @@ const List = ({
   const listItems = tasks.map((task, index) => (
     <li
       key={index}
-      className={task.isDone ? styles.itemDoneStyle : ""}
-      style={task.isSearch ? { display: "block" } : { display: "none" }}
+      className={task.isDone ? styles.itemDoneStyle : styles.listItems}
+      style={task.isSearch ? { display: "flex" } : { display: "none" }}
     >
       {!task.isEditing && (
         <>
           {task.item}
 
           <Button
-            btnLabel="Edit"
+            btnLabel={<MdEditSquare />}
             className={styles.itemBtn}
             btnClickHandler={() => isEditingHandler(index)}
             isDisabled={task.isDone}
@@ -42,13 +52,13 @@ const List = ({
             inputChangeHandler={(value) => itemListChangeHandler(index, value)}
           />
           <Button
-            btnLabel="Save"
+            btnLabel={<MdSaveAs />}
             className={styles.itemBtn}
             btnClickHandler={() => itemSaveHandler(index)}
             isDisabled={task.editingItem.trim().length === 0}
           />
           <Button
-            btnLabel="Cancel"
+            btnLabel={<GiCancel />}
             className={styles.itemBtn}
             btnClickHandler={() => cancelHandler(index)}
           />
@@ -56,13 +66,13 @@ const List = ({
       )}
 
       <Button
-        btnLabel="UP"
+        btnLabel={<MdArrowCircleUp />}
         className={styles.itemBtn}
         btnClickHandler={() => swapListItemHandler(index, index - 1)}
         isDisabled={index === 0 || isSearching}
       />
       <Button
-        btnLabel="DOWN"
+        btnLabel={<MdArrowCircleDown />}
         className={styles.itemBtn}
         btnClickHandler={() => swapListItemHandler(index, index + 1)}
         isDisabled={index === tasks.length - 1 || isSearching}
@@ -70,7 +80,7 @@ const List = ({
 
       {task.isDone && (
         <Button
-          btnLabel="Delete"
+          btnLabel={<MdDeleteForever />}
           className={styles.itemBtn}
           btnClickHandler={() => deleteHandler(index)}
         />
@@ -78,7 +88,7 @@ const List = ({
 
       {!task.isDone && (
         <Button
-          btnLabel="Done"
+          btnLabel={<MdDoneAll />}
           className={styles.itemBtn}
           btnClickHandler={() => isDoneHandler(index)}
           isDisabled={task.isEditing}

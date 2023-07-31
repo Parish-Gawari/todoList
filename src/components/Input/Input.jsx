@@ -11,6 +11,7 @@ const Input = ({ inputChangeHandler, inputValue, keyHandler }) => {
       onChange={changeHandler}
       value={inputValue}
       onKeyUp={keyHandler}
+      placeholder="Enter text here.."
     />
   );
 };
