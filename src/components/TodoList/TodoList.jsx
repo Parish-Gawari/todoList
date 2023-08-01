@@ -151,13 +151,16 @@ const TodoList = () => {
         btnClickHandler={btnClickHandler}
         btnLabel="Add to List"
         isDisabled={text.trim().length === 0}
+        className={styles.btnStyle}
       />
       <Button
+        className={styles.btnStyle}
         btnClickHandler={deleteAllHandler}
         btnLabel="Clear All"
         isDisabled={list.length === 0}
       />
       <Button
+        className={styles.btnStyle}
         btnClickHandler={clearAllDoneHandler}
         btnLabel="Clear Done"
         isDisabled={

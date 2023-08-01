@@ -1,8 +1,31 @@
+/* eslint-disable react/jsx-no-target-blank */
 import styles from "./AppFooter.module.css";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 const AppFooter = () => {
-  // console.log('AppFooter');
-  return <footer className={styles.footer}>Made By Parish</footer>;
+  return (
+    <footer className={styles.footer}>
+      <span className={styles.spanIcon}>
+        <a
+          href="https://github.com/Samael-24"
+          target="_blank"
+          style={{ color: "black" }}
+        >
+          <FaGithub />
+        </a>
+      </span>
+      <span className={styles.spanIcon}>
+        <a
+          href="https://www.linkedin.com/in/parish-gawari-363806219"
+          target="_blank"
+          style={{ color: "black" }}
+        >
+          <FaLinkedin />
+        </a>
+      </span>
+      <span className={styles.spanText}>Made By Parish &copy; 2023</span>
+    </footer>
+  );
 };
 
 export default AppFooter;
