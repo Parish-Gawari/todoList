@@ -21,7 +21,7 @@ A **Personal Todo App** built with **React** and **Redux**, styled using **Tailw
 
 ## Demo
 
-Check out the live demo here: [Live Demo](https://personalltodoapp.netlify.app/)
+Check out the live demo here: <a href="https://personalltodoapp.netlify.app/" target="_blank">Live Demo</a>
 
 
 
